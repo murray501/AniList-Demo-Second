@@ -15,6 +15,7 @@ export async function getStaticProps() {
                     coverImage {
                         large
                     }
+                    description
                 }
             }
         }
@@ -44,7 +45,7 @@ function EachMedia({data}) {
     const clickImg = () => {
         router.push({
             pathname:"/media",
-            query: { id: data.id }
+            query: { data: JSON.stringify(data) }
         })
     }
 
