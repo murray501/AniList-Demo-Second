@@ -1,43 +1,69 @@
 import { gql } from "@apollo/client";
 import client from "../apollo-client";
-import parse from "html-react-parser";
-import { useRouter } from 'next/router';
+import { Router, useRouter } from 'next/router';
 
-export default function Media() {
-    const router = useRouter();
-    const data = JSON.parse(router.query.data);
+export async function getStaticProps() {
+    const { data } = await client.query({
+        query: gql`
+        {
+            Page {
+                media(sort: POPULARITY_DESC, type: ANIME) {
+                    id
+                    title {
+                        english
+                    }
+                    coverImage {
+                        large
+                    }
+                    description
+                }
+            }
+        }
+        `,
+    });
     
-    const goCharacter = () => {
-      router.push({
-          pathname:"/character",
-          query: { id: data.id }
-      })
+    return {
+        props: {
+            media: data.Page.media
+        }
+    }
+}
+
+export default function Media({media}) {
+    return (
+        <section class="section">
+             <div class="columns is-multiline">
+                {media.map(x => <EachMedia data={x} />)}                 
+             </div>
+        </section>      
+    )
+}
+
+function EachMedia({data}) {
+    const router = useRouter();
+
+    const clickImg = () => {
+        router.push({
+            pathname:"/media_detail",
+            query: { data: JSON.stringify(data) }
+        })
     }
 
     return (
-        <section class="section">
-          <div class="columns">
-            <div class="column is-narrow">
-              <figure>
-                <img src={data.coverImage.large} width="200" height="300" />
-              </figure>
-            </div>
-            <div class="column">
-              <div class="content">
-                <p>
-                  <strong>{data.title.english}</strong>
-                  <br/>
-                  {parse(data.description)}
-                </p>
-              </div>
-              <nav class="level is-mobile">
-                <div class="level-left">
-                  <button class="level-item button is-small" onClick={goCharacter}>Characters</button>
+        <div class="column is-6-tablet is-4-desktop is-3-widescreen">
+            <article class="box">
+                <div class="media">
+                    <div class="media-content">
+                        <figure>
+                            <img src={data.coverImage.large} width="200" height="300" onClick={clickImg} />
+                        </figure>
+                        <p>
+                            <strong>{data.title.english}</strong>
+                        </p>
+                    </div>
                 </div>
-              </nav>
-            </div>
-          </div>
-        </section>
+            </article>
+        </div>
     )
 }
 

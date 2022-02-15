@@ -1,69 +1,50 @@
-import { gql } from "@apollo/client";
-import client from "../apollo-client";
-import { Router, useRouter } from 'next/router';
-
-export async function getStaticProps() {
-    const { data } = await client.query({
-        query: gql`
-        {
-            Page {
-                media(sort: POPULARITY_DESC, type: ANIME) {
-                    id
-                    title {
-                        english
-                    }
-                    coverImage {
-                        large
-                    }
-                    description
-                }
-            }
-        }
-        `,
-    });
-    
-    return {
-        props: {
-            media: data.Page.media
-        }
-    }
-}
-
-export default function Index({media}) {
-    return (
-        <section class="section">
-             <div class="columns is-multiline">
-                {media.map(x => <EachMedia data={x} />)}                 
-             </div>
-        </section>      
-    )
-}
-
-function EachMedia({data}) {
-    const router = useRouter();
-
-    const clickImg = () => {
-        router.push({
-            pathname:"/media",
-            query: { data: JSON.stringify(data) }
-        })
-    }
+export default function Index() {
+    const submit = () => {
+        e.preventDefault();
+    };
 
     return (
-        <div class="column is-6-tablet is-4-desktop is-3-widescreen">
-            <article class="box">
-                <div class="media">
-                    <div class="media-content">
-                        <figure>
-                            <img src={data.coverImage.large} width="200" height="300" onClick={clickImg} />
-                        </figure>
-                        <p>
-                            <strong>{data.title.english}</strong>
-                        </p>
+        <section class="hero">
+            <div class="hero-body">
+                <p class="title">
+                    Demo: AniList
+                </p>
+                <form onSubmit={submit}>
+                    <div class="field">
+                        <label class="label">Choose Anime or Manga</label>
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" name="anime_manga" value="anime" checked/>
+                                    Anime
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="anime_manga" value="manga" />
+                                    Manga
+                            </label>
+                        </div>
                     </div>
-                </div>
-            </article>
-        </div>
+
+                    <div class="field">
+                        <label class="label">Sort by</label>
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" name="sortby" value="popularity" checked/>
+                                    Popularity
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="sortby" value="trending" />
+                                    Trending
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <button class="button is-success">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
     )
 }
-
