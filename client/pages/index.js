@@ -1,50 +1,57 @@
+import { useState } from "react";
+import { useRouter } from "next/router";
+
 export default function Index() {
+
+    const router = useRouter();
+
+    const [value, RadioProp] = createRadioButton(["ANIME", "MANGA"],"Choose Anime or Manga");
+    const [value2, RadioProp2] = createRadioButton(["POPULARITY", "TRENDING","FAVOURITES"], "Sort By");                
+                    
     const submit = () => {
-        e.preventDefault();
+        router.push({
+            pathname: "/media",
+            query: {type: value, sort: value2}
+        })
     };
 
     return (
-        <section class="hero">
-            <div class="hero-body">
-                <p class="title">
-                    Demo: AniList
-                </p>
-                <form onSubmit={submit}>
-                    <div class="field">
-                        <label class="label">Choose Anime or Manga</label>
-                        <div class="control">
-                            <label class="radio">
-                                <input type="radio" name="anime_manga" value="anime" checked/>
-                                    Anime
-                            </label>
-                            <label class="radio">
-                                <input type="radio" name="anime_manga" value="manga" />
-                                    Manga
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label class="label">Sort by</label>
-                        <div class="control">
-                            <label class="radio">
-                                <input type="radio" name="sortby" value="popularity" checked/>
-                                    Popularity
-                            </label>
-                            <label class="radio">
-                                <input type="radio" name="sortby" value="trending" />
-                                    Trending
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <button class="button is-success">
-                            Submit
-                        </button>
-                    </div>
-                </form>
+        <div class="container">
+            <div class="notification is-primary">
+                AniList
             </div>
-        </section>
+            {RadioProp}
+            {RadioProp2}
+            <div class="field is-grouped">
+                <div class="control">
+                    <button class="button is-link" onClick={submit}>Submit</button>
+                </div>
+            </div>
+        </div>
     )
+}
+
+function createRadioButton(values, label) {
+    const [value, setValue] = useState(values[0]);
+
+    const handleChange = e => {
+        setValue(e.target.value);
+    }
+
+    return([
+        value, 
+        (<div class="field">
+            <label class="label">{label}</label>
+            <div class="control">
+                {
+                    values.map (x => 
+                        <label class="radio">
+                        <input type="radio" value={x} onChange={handleChange} checked={value === x} />
+                            {x}
+                        </label>
+                    )
+                }
+            </div>
+        </div>)
+    ])
 }

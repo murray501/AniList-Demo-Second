@@ -2,15 +2,20 @@ import { gql } from "@apollo/client";
 import client from "../apollo-client";
 import { Router, useRouter } from 'next/router';
 
-export async function getStaticProps() {
-    const { data } = await client.query({
-        query: gql`
-        {
+export async function getServerSideProps(context) {
+
+    const type = context.query.type;
+    const sort = context.query.sort;
+    const variables = {type: type, sort: sort + "_DESC"};
+
+    const query = gql`
+        query ($type: MediaType, $sort: [MediaSort]) {
             Page {
-                media(sort: POPULARITY_DESC, type: ANIME) {
+                media(sort: $sort, type: $type) {
                     id
                     title {
                         english
+                        native
                     }
                     coverImage {
                         large
@@ -19,22 +24,30 @@ export async function getStaticProps() {
                 }
             }
         }
-        `,
+    `;
+
+    const { data } = await client.query({
+        query: query,
+        variables: variables,
     });
     
     return {
         props: {
+            variables: {type: type, sort: sort},
             media: data.Page.media
         }
     }
 }
 
-export default function Media({media}) {
+export default function Media({variables, media}) {
     return (
         <section class="section">
-             <div class="columns is-multiline">
+            <div class="notification is-primary">
+                type: {variables.type} sort: {variables.sort}
+            </div>
+            <div class="columns is-multiline">
                 {media.map(x => <EachMedia data={x} />)}                 
-             </div>
+            </div>
         </section>      
     )
 }
@@ -58,7 +71,7 @@ function EachMedia({data}) {
                             <img src={data.coverImage.large} width="200" height="300" onClick={clickImg} />
                         </figure>
                         <p>
-                            <strong>{data.title.english}</strong>
+                            <strong>{data.title.english ? data.title.english : data.title.native}</strong>
                         </p>
                     </div>
                 </div>

@@ -25,7 +25,7 @@ export default function MediaDetail() {
             <div class="column">
               <div class="content">
                 <p>
-                  <strong>{data.title.english}</strong>
+                  <strong>{data.title.english ? data.title.english : data.title.native}</strong>
                   <br/>
                   {parse(data.description)}
                 </p>
