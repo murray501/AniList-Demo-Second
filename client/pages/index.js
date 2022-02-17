@@ -16,10 +16,8 @@ export default function Index() {
     };
 
     return (
-        <div class="container">
-            <div class="notification is-primary">
-                AniList
-            </div>
+        <section class="section">
+            <h1 class="title">AniList</h1>
             {RadioProp}
             {RadioProp2}
             <div class="field is-grouped">
@@ -27,7 +25,7 @@ export default function Index() {
                     <button class="button is-link" onClick={submit}>Submit</button>
                 </div>
             </div>
-        </div>
+        </section>
     )
 }
 

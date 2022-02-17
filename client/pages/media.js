@@ -42,9 +42,9 @@ export async function getServerSideProps(context) {
 export default function Media({variables, media}) {
     return (
         <section class="section">
-            <div class="notification is-primary">
+            <h1 class="subtitle">
                 type: {variables.type} sort: {variables.sort}
-            </div>
+            </h1>
             <div class="columns is-multiline">
                 {media.map(x => <EachMedia data={x} />)}                 
             </div>
