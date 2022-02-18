@@ -14,6 +14,13 @@ export default function MediaDetail() {
       })
     }
 
+    const goReview = () => {
+      router.push({
+          pathname:"/review",
+          query: { id: data.id }
+      })
+    }
+
     return (
         <section class="section">
           <div class="columns">
@@ -28,16 +35,43 @@ export default function MediaDetail() {
                   <strong>{data.title.english ? data.title.english : data.title.native}</strong>
                   <br/>
                   {parse(data.description)}
+                  <br />
                 </p>
+                <Genres data={data} />
               </div>
               <nav class="level is-mobile">
                 <div class="level-left">
                   <button class="level-item button is-small" onClick={goCharacter}>Characters</button>
+                  <button class="level-item button is-small" onClick={goReview}>Reviews</button>
+                  <a href={data.siteUrl} class="level-item button is-small">SiteUrl</a>
                 </div>
               </nav>
             </div>
+            <Trailer data={data} />
           </div>
         </section>
     )
 }
 
+function Genres({data}) {
+  return (
+    <div class="is-small">
+      <strong>Genres: </strong>{data.genres.join()}
+    </div>
+  )
+}
+
+function Trailer({data}) {
+  if (data.trailer) {
+    if (data.trailer.site == "youtube") {
+      return (
+        <div class="column">
+          <figure class="image is-4by3">
+            <iframe class="has-ratio" width="480" height="360" src={"https://www.youtube.com/embed/" + data.trailer.id} frameborder="0"></iframe>
+          </figure>
+        </div>
+      )
+    }
+  } 
+  return (<></>);
+}

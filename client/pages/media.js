@@ -21,6 +21,13 @@ export async function getServerSideProps(context) {
                         large
                     }
                     description
+                    siteUrl
+                    trailer {
+                       id 
+                       site
+                       thumbnail                     
+                    }
+                    genres
                 }
             }
         }

@@ -30,6 +30,9 @@ export default function CharacterDetail() {
                     <strong>Age: </strong>{data.age}
                   </div>
                 </div>
+                <div class="level-right">
+                    <a href={data.siteUrl} class="button is-small">SiteUrl</a>
+                </div>
               </div>
             </div>
           </div>
