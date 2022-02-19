@@ -6,7 +6,7 @@ export default function Index() {
     const router = useRouter();
 
     const [value, RadioProp] = createRadioButton(["ANIME", "MANGA"],"Choose Anime or Manga");
-    const [value2, RadioProp2] = createRadioButton(["POPULARITY", "TRENDING","FAVOURITES"], "Sort By");                
+    const [value2, RadioProp2] = createRadioButton(["POPULARITY", "TRENDING","FAVOURITES", "SCORE"], "Sort By");                
                     
     const submit = () => {
         router.push({
