@@ -12,7 +12,6 @@ export async function getServerSideProps(context) {
               nodes {
                 id
                 summary
-                body(asHtml: true)
                 user {
                   name
                 }
@@ -46,10 +45,9 @@ function EachReview({data}) {
   const goDetail = () => {
     router.push({
         pathname:"/review_detail",
-        query: { data: JSON.stringify(data) }
+        query: { id: data.id }
     })
   }
-
 
   if (data.private) {
     return <></>

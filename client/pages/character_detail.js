@@ -1,10 +1,41 @@
+import { gql } from "@apollo/client";
+import client from "../apollo-client";
 import parse from "html-react-parser";
-import { useRouter } from 'next/router';
 
-export default function CharacterDetail() {
-    const router = useRouter();
-    const data = JSON.parse(router.query.data);
-    
+export async function getServerSideProps(context) {
+  const id = context.query.id;
+  const query = gql`
+    query($id: Int) {
+      Character(id: $id) {
+        id
+        name {
+          first
+          last
+        }
+        image {
+          large
+        }
+        gender
+        age
+        siteUrl
+        description
+      }
+    }
+  `;
+
+  const { data } = await client.query({
+      query: query,
+      variables: {
+          id: id
+      }
+  });
+
+  return {
+    props: {data: data.Character}
+  }
+}
+
+export default function CharacterDetail({data}) {
     return (
         <section class="section">
           <div class="columns">

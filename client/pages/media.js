@@ -20,14 +20,6 @@ export async function getServerSideProps(context) {
                     coverImage {
                         large
                     }
-                    description
-                    siteUrl
-                    trailer {
-                       id 
-                       site
-                       thumbnail                     
-                    }
-                    genres
                 }
             }
         }
@@ -65,7 +57,7 @@ function EachMedia({data}) {
     const clickImg = () => {
         router.push({
             pathname:"/media_detail",
-            query: { data: JSON.stringify(data) }
+            query: { id: data.id }
         })
     }
 

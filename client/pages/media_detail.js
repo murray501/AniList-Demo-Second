@@ -3,10 +3,45 @@ import client from "../apollo-client";
 import parse from "html-react-parser";
 import { useRouter } from 'next/router';
 
-export default function MediaDetail() {
+export async function getServerSideProps(context) {
+  const id = context.query.id;
+  const query = gql`
+      query ($id: Int) {
+        Media(id: $id) {
+          id
+          title {
+            english
+            native
+          }
+          coverImage {
+            large
+          }
+          description
+          siteUrl
+          trailer {
+            id 
+            site
+            thumbnail                     
+          }
+          genres
+        }
+      }
+  `;
+
+  const { data } = await client.query({
+    query: query,
+    variables: {
+        id: id
+    }
+  });
+
+  return {
+    props: {data: data.Media}
+  }
+}
+
+export default function MediaDetail({data}) {
     const router = useRouter();
-    const data = JSON.parse(router.query.data);
-    
     const goCharacter = () => {
       router.push({
           pathname:"/character",

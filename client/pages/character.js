@@ -17,12 +17,7 @@ export async function getServerSideProps(context) {
                 }
                 image {
                   large
-                  medium
                 }
-                gender
-                age
-                siteUrl
-                description
               }
             }
           }
@@ -53,7 +48,7 @@ function EachCharacter({data}) {
   const goDetail = () => {
     router.push({
         pathname:"/character_detail",
-        query: { data: JSON.stringify(data) }
+        query: { id: data.id }
     })
   }
 
