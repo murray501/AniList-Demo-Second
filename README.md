@@ -1,7 +1,6 @@
-## Demo
+## Demo (AniList mobile version)
 [https://my-anilist-demo.netlify.app](https://my-anilist-demo.netlify.app)
 
-AniList mobile version
 
 ## Implementation (used for building this app)
 1. AniList API (GraphQL)  [https://anilist.gitbook.io/anilist-apiv2-docs/](https://anilist.gitbook.io/anilist-apiv2-docs/)
